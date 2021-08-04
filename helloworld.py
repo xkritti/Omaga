@@ -27,16 +27,18 @@ import urllib3
 import urllib.parse
 import traceback
 import atexit
+import json
 
 print("""
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ✯➣ พัฒนาโดย : http://github.com/xkrit.ti
 ✯➣ ไทย ( Thailand )
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━""")
-# first time login whit 4 PIN  
-client = LINE("email","password")
+# first time login whit 4 PIN
+# client = LINE("kk1.asian@gmail.com","casinokk1")
 # copy authToken for bypass 4PIN in next time
-# client = LINE("authToken")
+client = LINE(
+    "F5JtGWm13Zt4OGbMkQBa.Iaw7xsLTjlRNjTigSjC9AG.dx9VcRWEq7ksQNRMBjXrlgK/qQB2PmdbbXnuEsb7omc=")
 clientMid = client.profile.mid
 clientProfile = client.getProfile()
 clientSettings = client.getSettings()
@@ -44,14 +46,16 @@ clientPoll = OEPoll(client)
 botStart = time.time()
 
 msg_dict = {}
+link_dict = {}
+link_dict['ticket_sucess'] = []
 
 settings = {
     "autoAdd": False,
-    "autoJoin": False,
+    "autoJoin": True,
     "autoLeave": False,
     "autoRead": False,
     "autoRespon": False,
-    "autoJoinTicket": False,
+    "autoJoinTicket": True,
     "checkContact": False,
     "checkPost": False,
     "checkSticker": False,
@@ -82,8 +86,31 @@ read = {
 }
 
 try:
-    with open("Log_data.json", "r", encoding="utf_8_sig") as f:
-        msg_dict = json.loads(f.read())
+    f = open('link.json',)
+    # msg_dict = json.loads(f.read())
+    data = json.load(f)
+    temp_x = data['link']
+    x = range(1006, len(temp_x))
+    for i in x:
+        data_loop = temp_x[i]
+        temp_text = str(data_loop).split('/g/')
+        print(i, temp_text[1])
+        if settings["autoJoinTicket"] == True:
+            print("ticket_id : ", temp_text[1])
+            try:
+                group = client.findGroupByTicket(temp_text[1])
+                client.acceptGroupInvitationByTicket(group.id, temp_text[1])
+                link_dict['ticket_sucess'].append({group.id})
+                print("ได้เข้าร่วมกลุ่ม group %s" % str(group))
+                client.sendMessage('c912cf7549762a0ac6d8cfe3b4f038f1d',
+                                   "ได้เข้าร่วมกลุ่ม group %s" % str(group.name))
+                time.sleep(60)
+
+            except:
+                print("can't join group !!!!")
+                time.sleep(60)
+
+    f.close()
 except:
     print("Couldn't read Log data")
 
@@ -187,6 +214,7 @@ def command(text):
         cmd = text.lower()
     return cmd
 
+
 def helpmessage():
     if settings['setKey'] == True:
         key = settings['keyCommand']
@@ -259,6 +287,7 @@ def helpmessage():
                     "╚══[ Copyright @xkrit.ti ]"
     return helpMessage
 
+
 def clientBot(op):
     try:
         if op.type == 0:
@@ -276,19 +305,25 @@ def clientBot(op):
             print("[ 13 ] NOTIFIED INVITE INTO GROUP")
             if clientMid in op.param3:
                 if settings["autoJoin"] == True:
+                    to = op.param1
                     client.acceptGroupInvitation(op.param1)
-                sendMention(
-                    op.param1, "Halo @!, Terimakasih Telah Mengundang Saya :3")
+                    group = client.getGroup(to)
+                    print("Gid : ", group.id, "\nGname : ",
+                          group.name, "\nGmembers : ", group.members)
 
-        if op.type == 15: 
+                # sendMention(op.param1, "Halo @!, Terimakasih Telah Mengundang Saya :3")
+
+        if op.type == 15:
             print("[ 15 ] MEMBER LEAVE TO GROUP")
             if settings["notified"] == True:
-                client.sendMessage(op.param1,"Bye Bye "+client.getContact(op.param2).displayName)
-        
-        if op.type == 17: 
+                client.sendMessage(op.param1, "Bye Bye " +
+                                   client.getContact(op.param2).displayName)
+
+        if op.type == 17:
             print("[ 17 ] MEMBER JOIN TO GROUP")
             if settings["notified"] == True:
-                client.sendMessage(op.param1,"ยินดีต้อนรับ " + client.getContact(op.param2).displayName + '\nแอดเพื่อน FoxTeam ก่อนสมัครเท่านั้น ' + '\n❗ถ้าแอดเพื่อนแล้วไม่ต้องแอดใหม่❗' + "\nhttps://lin.ee/jIGjdqe")
+                client.sendMessage(op.param1, "ยินดีต้อนรับ " + client.getContact(op.param2).displayName +
+                                   '\nแอดเพื่อน FoxTeam ก่อนสมัครเท่านั้น ' + '\n❗ถ้าแอดเพื่อนแล้วไม่ต้องแอดใหม่❗' + "\nhttps://lin.ee/jIGjdqe")
 
         if op.type in [22, 24]:
             print("[ 22 And 24 ] NOTIFIED INVITE INTO ROOM & NOTIFIED LEAVE ROOM")
@@ -688,6 +723,11 @@ def clientBot(op):
                                             client.sendImageWithURL(
                                                 to, str(path))
 # Pembatas Script #
+                            elif cmd == 'joinbygid':
+                                print('join by group id')
+                                n = client.getGroupIdsJoined()
+                                print(n)
+                                # client.inviteIntoGroup('c912cf7549762a0ac6d8cfe3b4f038f1d','u83411c9d50d019047757c3f65e0a3061')
                             elif cmd == 'groupcreator':
                                 group = client.getGroup(to)
                                 GS = group.creator.mid
@@ -708,6 +748,7 @@ def clientBot(op):
                                 if msg.toType == 2:
                                     group = client.getGroup(to)
                                     if group.preventedJoinByTicket == False:
+                                        # ot = "c912cf7549762a0ac6d8cfe3b4f038f1d"
                                         ticket = client.reissueGroupTicket(to)
                                         client.sendMessage(
                                             to, "[ Group Ticket ]\nhttps://line.me/R/ti/g/{}".format(str(ticket)))
@@ -1086,8 +1127,7 @@ def clientBot(op):
                                         client.sendMessage(to, str(ret_))
                                 except Exception as error:
                                     logError(error)
-                            
-                            
+
                             elif cmd.startswith("searchyoutube"):
                                 sep = text.split(" ")
                                 search = text.replace(sep[0] + " ", "")
@@ -1285,12 +1325,16 @@ def clientBot(op):
                                 for l in links:
                                     if l not in n_links:
                                         n_links.append(l)
+                                print(n_links)
                                 for ticket_id in n_links:
+                                    print("ticket_id : ", ticket_id)
                                     group = client.findGroupByTicket(ticket_id)
                                     client.acceptGroupInvitationByTicket(
                                         group.id, ticket_id)
-                                    client.sendMessage(
-                                        to, "ได้เข้าร่วมกลุ่ม group %s" % str(group.name))
+                                    print("ได้เข้าร่วมกลุ่ม group %s" %
+                                          str(group))
+                                    # client.sendMessage(
+                                    #     to, "ได้เข้าร่วมกลุ่ม group %s" % str(group.name))
                         if 'MENTION' in msg.contentMetadata.keys() != None:
                             names = re.findall(r'@(\w+)', text)
                             mention = ast.literal_eval(
@@ -1303,6 +1347,10 @@ def clientBot(op):
                                         sendMention(
                                             sender, "Oi Asw @!,jangan main tag tag", [sender])
                                     break
+                        if 'export' == msg.text:
+                            with open('data.txt', "w") as outfile:
+                                json.dump(link_dict, outfile)
+
             except Exception as error:
                 logError(error)
                 traceback.print_tb(error.__traceback__)

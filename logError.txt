@@ -1,0 +1,13 @@
+
+[ Saturday, 31 - 07 - 2021 | 15:26:55 ] Invalid mids
+[ Saturday, 31 - 07 - 2021 | 15:41:09 ] Remote end closed connection without response
+[ Saturday, 31 - 07 - 2021 | 15:48:48 ] getGroup() missing 1 required positional argument: 'groupId'
+[ Saturday, 31 - 07 - 2021 | 15:51:16 ] local variable 'to' referenced before assignment
+[ Saturday, 31 - 07 - 2021 | 15:55:31 ] 'Operation' object has no attribute 'messsage'
+[ Saturday, 31 - 07 - 2021 | 16:26:56 ] can only concatenate str (not "list") to str
+[ Saturday, 31 - 07 - 2021 | 16:34:40 ] TalkException(code=5, reason='Ticket not found: qDwIa1DPE3', parameterMap=None)
+[ Saturday, 31 - 07 - 2021 | 16:36:21 ] TalkException(code=5, reason='Ticket not found: qDwIa1DP45', parameterMap=None)
+[ Saturday, 31 - 07 - 2021 | 17:23:25 ] TalkException(code=10, reason='not a member of group', parameterMap={'2': 'c912cf7549762a0ac6d8cfe3b4f038f1d', '0': 'u636ccaf511d2249875c8c4c66b6078b0'})
+[ Wednesday, 04 - 08 - 2021 | 18:42:11 ] TalkException(code=35, reason='request blocked', parameterMap={})
+[ Wednesday, 04 - 08 - 2021 | 18:43:35 ] TalkException(code=35, reason='request blocked', parameterMap={})
+[ Wednesday, 04 - 08 - 2021 | 18:44:23 ] TalkException(code=35, reason='request blocked', parameterMap={})
