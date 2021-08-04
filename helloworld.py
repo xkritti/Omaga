@@ -37,8 +37,7 @@ print("""
 # first time login whit 4 PIN
 # client = LINE("kk1.asian@gmail.com","casinokk1")
 # copy authToken for bypass 4PIN in next time
-client = LINE(
-    "F5JtGWm13Zt4OGbMkQBa.Iaw7xsLTjlRNjTigSjC9AG.dx9VcRWEq7ksQNRMBjXrlgK/qQB2PmdbbXnuEsb7omc=")
+# client = LINE("")
 clientMid = client.profile.mid
 clientProfile = client.getProfile()
 clientSettings = client.getSettings()
