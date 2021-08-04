@@ -35,9 +35,9 @@ print("""
 ✯➣ ไทย ( Thailand )
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━""")
 # first time login whit 4 PIN
-# client = LINE("kk1.asian@gmail.com","casinokk1")
+# client = LINE("email","password")
 # copy authToken for bypass 4PIN in next time
-# client = LINE("")
+client = LINE("token")
 clientMid = client.profile.mid
 clientProfile = client.getProfile()
 clientSettings = client.getSettings()
@@ -89,25 +89,43 @@ try:
     # msg_dict = json.loads(f.read())
     data = json.load(f)
     temp_x = data['link']
-    x = range(1006, len(temp_x))
+    x = range(0, len(temp_x))
     for i in x:
         data_loop = temp_x[i]
         temp_text = str(data_loop).split('/g/')
         print(i, temp_text[1])
         if settings["autoJoinTicket"] == True:
             print("ticket_id : ", temp_text[1])
-            try:
-                group = client.findGroupByTicket(temp_text[1])
-                client.acceptGroupInvitationByTicket(group.id, temp_text[1])
-                link_dict['ticket_sucess'].append({group.id})
-                print("ได้เข้าร่วมกลุ่ม group %s" % str(group))
-                client.sendMessage('c912cf7549762a0ac6d8cfe3b4f038f1d',
-                                   "ได้เข้าร่วมกลุ่ม group %s" % str(group.name))
-                time.sleep(60)
-
-            except:
-                print("can't join group !!!!")
-                time.sleep(60)
+            # try:
+            #     group = client.findGroupByTicket(temp_text[1])
+            #     client.acceptGroupInvitationByTicket(group.id, temp_text[1])
+            #     link_dict['ticket_sucess'].append({group.id})
+            #     print("ได้เข้าร่วมกลุ่ม group %s" % str(group))
+            #     client.sendMessage('c912cf7549762a0ac6d8cfe3b4f038f1d',
+            #                        "ได้เข้าร่วมกลุ่ม group %s" % str(group.name))
+            #     time.sleep(60)
+            # except Exception as error:
+            #     if str(error.reason) == 'request blocked':
+            #         print(error.reason,' :delay for 5 mins !!!')
+            #         time.sleep(300)
+            while(True):
+                try:
+                    group = client.findGroupByTicket(temp_text[1])
+                    client.acceptGroupInvitationByTicket(group.id, temp_text[1])
+                    link_dict['ticket_sucess'].append({group.id})
+                    print("ได้เข้าร่วมกลุ่ม group %s" % str(group))
+                    client.sendMessage('c912cf7549762a0ac6d8cfe3b4f038f1d',"ได้เข้าร่วมกลุ่ม group %s" % str(group.name))
+                    time.sleep(30)
+                    break
+                except Exception as error:
+                    if str(error.reason) == 'request blocked':
+                        print(error.reason,' :delay for 5 mins !!!')
+                        time.sleep(300)
+                        continue
+                    else:
+                        print(error.reason)
+                        time.sleep(30)
+                    break
 
     f.close()
 except:
